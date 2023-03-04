@@ -1,7 +1,12 @@
 const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "https://example.com",
+    methods: ["GET", "POST"],
+  },
+});
 const port = 3000;
 
 io.on("connection", (socket) => {
@@ -9,10 +14,10 @@ io.on("connection", (socket) => {
     console.log("x desconectou " + socket.id);
   });
 
-  socket.on('mensagem', (data) => {
-    io.emit('showMsg', data)
+  socket.on("mensagem", (data) => {
+    io.emit("showMsg", data);
     console.log(data);
-  })
+  });
 });
 
 app.set("view engine", "ejs");
